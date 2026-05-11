@@ -1,0 +1,24 @@
+# General operating system and editor files
+.DS_Store          # macOS system files
+Thumbs.db          # Windows system files
+.idea/             # JetBrains IDE configuration folder
+.vscode/           # VS Code configuration folder
+*.swp              # Vim swap files
+
+# Dependency directories
+node_modules/      # Node.js dependencies
+.venv/             # Python virtual environment
+/target/           # Java build output directory
+
+# Compiled or generated files
+*.log              # Log files
+*.temp             # Temporary files
+/build/            # General build output directory
+dist/              # Distribution directory
+
+# Sensitive data/credentials
+.env               # Environment variable files
+
+# Ignore everything in the "temp" directory, but re-include an important file
+temp/*
+!temp/important.txt
