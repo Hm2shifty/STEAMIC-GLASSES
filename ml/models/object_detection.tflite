@@ -1,0 +1,58 @@
+import React, { useEffect, useRef } from 'react';
+import { getPriority } from '../utils/priority';
+import styles from './DetectionFeed.module.css';
+ 
+export default function DetectionFeed({ detections, connected }) {
+  const listRef = useRef(null);
+ 
+  // Auto-scroll to latest detection
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, [detections]);
+ 
+  if (!connected) {
+    return (
+      <div className={styles.empty}>
+        <span className={styles.emptyIcon}>◉</span>
+        <p>Connect the glasses to see live detections</p>
+      </div>
+    );
+  }
+ 
+  if (detections.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <span className={`${styles.emptyIcon} ${styles.scanning}`}>◉</span>
+        <p>Scanning environment…</p>
+      </div>
+    );
+  }
+ 
+  return (
+    <div className={styles.feed} ref={listRef}>
+      {detections.map((det, i) => {
+        const p = getPriority(det.priority);
+        return (
+          <div
+            key={i}
+            className={styles.card}
+            style={{ '--accent': p.color, '--accent-bg': p.bg }}
+          >
+            <div className={styles.cardLeft}>
+              <span className={styles.priorityBadge}>{p.label}</span>
+              <span className={styles.label}>{det.label}</span>
+            </div>
+            <div className={styles.cardRight}>
+              {det.distance && (
+                <span className={styles.distance}>{det.distance.toFixed(1)}m</span>
+              )}
+              <span className={styles.direction}>{det.direction ?? '—'}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
