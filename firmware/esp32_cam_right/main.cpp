@@ -1,10 +1,3 @@
-#pragma once
-
-bool initCamera();
-bool connectToHost();
-bool sendFrame();
-void cameraLoop();
-
 // ─────────────────────────────────────────
 //  EchoNav — esp32_cam_right/main.cpp
 //  Entry point for the RIGHT camera board.
@@ -21,6 +14,7 @@ void cameraLoop();
 
 #include "config.h"
 #include "camera.h"
+#include "bluetooth.h"
 #include "../shared/constants.h"
 
 #include <Arduino.h>
@@ -68,6 +62,9 @@ void setup() {
         Serial.println("[WARN] Host not reachable — will retry in loop");
     }
 
+    // 4. Init command listener from left board
+    initRightBoardComms();
+
     Serial.println("[BOOT] Right camera ready. Streaming...");
 }
 
@@ -80,6 +77,9 @@ void loop() {
 
     if (now - lastLoopMs >= LOOP_INTERVAL_MS) {
         lastLoopMs = now;
-        cameraLoop();
+        checkForCommands();          // check for commands from left board
+        if (!isPaused()) {
+            cameraLoop();            // only stream if not paused
+        }
     }
 }
