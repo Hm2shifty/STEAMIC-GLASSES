@@ -1,20 +1,15 @@
-# ─────────────────────────────────────────
-#  EchoNav — scripts/setup_env.ps1
-#  Run this ONCE on your Windows machine
-#  to install everything needed for the
-#  Python ML pipeline.
-#
-#  How to run:
-#  1. Open PowerShell as Administrator
-#  2. Navigate to the project folder
-#  3. Run: .\scripts\setup_env.ps1
-# ─────────────────────────────────────────
+# EchoNav - Environment Setup
+# Run this ONCE to install everything needed
+# How to run:
+# 1. Open PowerShell as Administrator
+# 2. Navigate to the project folder
+# 3. Run: .\scripts\setup_env.ps1
 
 Write-Host ""
 Write-Host "=== EchoNav Environment Setup ===" -ForegroundColor Cyan
 Write-Host ""
 
-# ── Check Python is installed ─────────────
+# Check Python is installed
 Write-Host "[1/5] Checking Python..." -ForegroundColor Yellow
 
 $pythonVersion = python --version 2>&1
@@ -25,42 +20,37 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "       Found: $pythonVersion" -ForegroundColor Green
 
-
-# ── Create virtual environment ────────────
+# Create virtual environment
 Write-Host "[2/5] Creating virtual environment..." -ForegroundColor Yellow
 
 if (Test-Path "venv") {
-    Write-Host "       venv already exists — skipping creation" -ForegroundColor Gray
+    Write-Host "       venv already exists - skipping creation" -ForegroundColor Gray
 } else {
     python -m venv venv
     Write-Host "       Created venv/" -ForegroundColor Green
 }
 
-
-# ── Activate virtual environment ──────────
+# Activate virtual environment
 Write-Host "[3/5] Activating virtual environment..." -ForegroundColor Yellow
 & ".\venv\Scripts\Activate.ps1"
 
-
-# ── Upgrade pip ───────────────────────────
+# Upgrade pip
 Write-Host "[4/5] Upgrading pip..." -ForegroundColor Yellow
 python -m pip install --upgrade pip --quiet
 
-
-# ── Install all dependencies ──────────────
+# Install all dependencies
 Write-Host "[5/5] Installing dependencies..." -ForegroundColor Yellow
 
 $packages = @(
-    "opencv-python",        # camera frame reading + stereo depth
-    "numpy",                # array math
-    "ultralytics",          # YOLOv8 (includes PyTorch)
-    "tensorflow-lite",      # TFLite runtime for ESP32 model testing
-    "matplotlib",           # charts for data_visualization.py
-    "pandas",               # CSV reading for test results
-    "pyserial",             # serial monitor for ESP32 debugging
-    "bleak",                # BLE communication with ESP32 from PC
-    "pyttsx3",              # text-to-speech for app testing
-    "openai-whisper"        # voice command recognition
+    "opencv-python",
+    "numpy",
+    "ultralytics",
+    "matplotlib",
+    "pandas",
+    "pyserial",
+    "bleak",
+    "pyttsx3",
+    "openai-whisper"
 )
 
 foreach ($pkg in $packages) {
@@ -71,8 +61,7 @@ foreach ($pkg in $packages) {
     }
 }
 
-
-# ── Done ──────────────────────────────────
+# Done
 Write-Host ""
 Write-Host "=== Setup complete! ===" -ForegroundColor Green
 Write-Host ""
